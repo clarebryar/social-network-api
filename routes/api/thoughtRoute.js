@@ -5,13 +5,15 @@ getThoughts,
 createThought, 
 getSingleThought,
 getThoughtAndUpdate,
-deleteThought} = require('../../controllers/thoughtsControllers')
+deleteThought,
+createReaction} = require('../../controllers/thoughtsControllers');
 
-router.route('/').get(getThoughts)
+router.route('/').get(getThoughts).post(createThought);
 
-// figure out how to push onto user thoughts array 
-// post(createThought)
 
 router.route('/:_id').get(getSingleThought).put(getThoughtAndUpdate).delete(deleteThought);
+
+// reactions
+router.route('/:thoughtId/reactions').post(createReaction)
 
 module.exports = router;

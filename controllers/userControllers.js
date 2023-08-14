@@ -85,18 +85,28 @@ module.exports = {
     
     async addNewFriend(req, res) {
         try {
-            const friendId = User.create(req.params.friendId);
-            const user = { _id: req.params.userId }
-
             const friend = await User.findOneAndUpdate(
-                  { $match: { user } },           
-                { $push: {friends: friendId }}, 
+                  { _id: req.params.userId },           
+                { $push: {friends: req.params.friendId }}, 
              );
      
              res.json(friend) 
         
             }
         catch (err) {
+            console.log(err);
+            return res.status(500).json(err);
+          }
+    }, 
+
+    async removeFriend(req, res) {
+        try {
+        const friend = await User.findOneAndUpdate(
+            { _id: req.params.userId },           
+            { $pull: {friends: req.params.friendId }},
+        );
+        res.json(friend);
+        } catch (err) {
             console.log(err);
             return res.status(500).json(err);
           }
