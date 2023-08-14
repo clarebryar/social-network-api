@@ -3,11 +3,11 @@ const { ObjectId } = require('mongoose').Types;
 const { json } = require('express');
 const { User } = require('../models');
 
-const thought = async (userId) => {
-    User.aggregate([
-        { $match: { _id: new ObjectId(userId) } },
-    ])
-}
+// const thought = async (userId) => {
+//     User.aggregate([
+//         { $match: { _id: new ObjectId(userId) } },
+//     ])
+// }
 
 
 module.exports = {
@@ -39,7 +39,9 @@ module.exports = {
         if (!user) {
           return res.status(404).json({ message: 'No user with that ID' })
         }
-      
+
+      res.json(user)
+
     } catch (err) {
         console.log(err);
         return res.status(500).json(err);
@@ -81,4 +83,22 @@ module.exports = {
           }
     },
     
+    async addNewFriend(req, res) {
+        try {
+            const friendId = User.create(req.params.friendId);
+            const user = { _id: req.params.userId }
+
+            const friend = await User.findOneAndUpdate(
+                  { $match: { user } },           
+                { $push: {friends: friendId }}, 
+             );
+     
+             res.json(friend) 
+        
+            }
+        catch (err) {
+            console.log(err);
+            return res.status(500).json(err);
+          }
+    }
 }; 
