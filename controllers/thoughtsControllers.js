@@ -84,11 +84,10 @@ module.exports = {
   async createReaction(req, res) {
     try {
 
-
       const thoughtReaction = await Thought.findOneAndUpdate(
         { _id: req.params.thoughtId },
-        {$addToSet: { reactionsBody: req.body } },
-        //  { $push: { reactions: } },
+        {$addToSet: { reactions: req.body } },
+        //  { $push: { reactions: reactionId } },
         {  runValidators: true, new: true }
       );
      
@@ -98,4 +97,18 @@ module.exports = {
       return res.status(500).json(err);
     }
   },
+
+  async deleteReaction(req, res) {
+    try {
+        const thoughtReaction = await Thought.findOneAndUpdate(
+            { _id: req.params.thoughtId },
+            { $pull: { reactions: req.body } }
+        );
+        res.json({ message: 'reaction removed!'});
+
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json(err);
+      }
+  }
 };

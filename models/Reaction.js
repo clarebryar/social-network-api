@@ -13,7 +13,7 @@ const reactionSchema = new Schema(
     },
     createdAt: {
       type: Date,
-      get: (date) => timeSince(date),
+      // get: (date) => timeSince(date),
     },
   },
   {
